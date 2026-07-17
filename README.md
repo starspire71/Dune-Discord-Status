@@ -22,6 +22,19 @@ Discord and the game (no "cross-chat"). As of this writing there's no
 documented, working mechanism to read or inject live in-game chat for
 self-hosted Dune Awakening servers. If that changes, contributions welcome.
 
+## Multi-sietch support
+
+You can run this bot against **multiple battlegroups at once** — each
+gets its own self-updating embed, and each can post to a different
+Discord channel, and even live on a different host/VM. See
+`SIETCH_1_*`, `SIETCH_2_*`, etc. in `.env.example`.
+
+**Already running the single-sietch version?** Your existing `.env` keeps
+working exactly as-is — no changes required. The bot automatically falls
+back to the old `K8S_NAMESPACE` / `BATTLEGROUP_NAME` / `DISCORD_CHANNEL_ID`
+variables if no `SIETCH_1_*` block is present, and it recognizes your
+existing status message so upgrading won't spam a duplicate post.
+
 ## Prerequisites
 
 - A self-hosted Dune Awakening battlegroup already up and running (Windows
@@ -95,7 +108,8 @@ The `NAME` column is your `BATTLEGROUP_NAME`.
 cp .env.example .env
 ```
 Fill in every field — see the comments in `.env.example` for what each
-one means. Two easy mistakes to avoid, both learned the hard way:
+one means, and see "Multi-sietch support" above if you're tracking more
+than one server. Two easy mistakes to avoid, both learned the hard way:
 - **`KUBECONFIG_PATH` must be an absolute path**, not `~/.kube/config` —
   the bot's SSH command runs non-interactively, and shell quoting for
   safety disables `~` expansion in that context.
